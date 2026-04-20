@@ -175,7 +175,7 @@ class SignatureType
      * @param \Knusperleicht\EpsBankTransfer\Internal\Generated\XmlDsig\ObjectXsd[] $object
      * @return self
      */
-    public function setObject(?array $object = null)
+    public function setObject(array $object = null)
     {
         $this->object = $object;
         return $this;

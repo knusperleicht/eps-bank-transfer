@@ -3,7 +3,7 @@
 [![Tests](https://github.com/knusperleicht/eps-bank-transfer/actions/workflows/tests.yml/badge.svg)](https://github.com/knusperleicht/eps-bank-transfer/actions/workflows/tests.yml)
 [![Latest Stable Version](https://img.shields.io/packagist/v/knusperleicht/eps-bank-transfer.svg)](https://packagist.org/packages/knusperleicht/eps-bank-transfer)
 [![Total Downloads](https://img.shields.io/packagist/dt/knusperleicht/eps-bank-transfer.svg)](https://packagist.org/packages/knusperleicht/eps-bank-transfer)
-[![License](https://img.shields.io/badge/license-GPL--2.0--or--later-blue.svg)](LICENSE)
+[![License](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](LICENSE)
 [![PHP Version Support](https://img.shields.io/packagist/php-v/knusperleicht/eps-bank-transfer.svg)](https://packagist.org/packages/knusperleicht/eps-bank-transfer)
 
 
@@ -101,7 +101,7 @@ vendor/bin/phpunit
 
 ## License
 
-GPL-2.0-or-later – see LICENSE.
+Apache-2.0 – see LICENSE.
 
 ## Credits
 

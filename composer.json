@@ -8,7 +8,7 @@
     "bank transfer"
   ],
   "type": "library",
-  "license": "GPL-2.0-or-later",
+  "license": "Apache-2.0",
   "homepage": "https://github.com/knusperleicht/eps-bank-transfer",
   "support": {
     "issues": "https://github.com/knusperleicht/eps-bank-transfer/issues",
@@ -32,7 +32,7 @@
     "ext-simplexml": "*",
     "ext-dom": "*",
     "ext-libxml": "*",
-    "jms/serializer": "^3.29",
+    "jms/serializer": "^3.24",
     "symfony/yaml": "^5.4 || ^6.0"
   },
   "require-dev": {
@@ -54,5 +54,9 @@
       "Knusperleicht\\EpsBankTransfer\\Tests\\": "tests/Unit/",
       "Knusperleicht\\EpsBankTransfer\\Tests\\Helper\\": "tests/Helper/"
     }
+  },
+  "scripts": {
+    "generate-code": "vendor/bin/xsd2php convert xsd2php.yaml resources/schemas/*.xsd",
+    "test": "vendor/bin/phpunit"
   }
 }

@@ -69,7 +69,7 @@ class EpsSOBankListProtocolAType
      * @param \Knusperleicht\EpsBankTransfer\Internal\Generated\BankList\BankDataType[] $bank
      * @return self
      */
-    public function setBank(?array $bank = null)
+    public function setBank(array $bank = null)
     {
         $this->bank = $bank;
         return $this;

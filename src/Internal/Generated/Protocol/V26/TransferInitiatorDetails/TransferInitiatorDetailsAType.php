@@ -131,7 +131,7 @@ class TransferInitiatorDetailsAType
      * @param \Knusperleicht\EpsBankTransfer\Internal\Generated\Protocol\V26\WebshopArticle[] $webshopDetails
      * @return self
      */
-    public function setWebshopDetails(?array $webshopDetails = null)
+    public function setWebshopDetails(array $webshopDetails = null)
     {
         $this->webshopDetails = $webshopDetails;
         return $this;

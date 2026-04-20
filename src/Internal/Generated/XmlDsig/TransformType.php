@@ -94,7 +94,7 @@ class TransformType
      * @param string[] $xPath
      * @return self
      */
-    public function setXPath(?array $xPath = null)
+    public function setXPath(array $xPath = null)
     {
         $this->xPath = $xPath;
         return $this;
