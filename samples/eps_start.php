@@ -18,7 +18,7 @@ declare(strict_types=1);
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-require_once('../vendor/autoload.php');
+require_once __DIR__ . '/../vendor/autoload.php';
 
 // Optional: interface version can be set in samples/config.local.php (key: 'interface_version').
 // If not provided, the library default will be used (currently '2.6').
@@ -28,6 +28,7 @@ use Knusperleicht\EpsBankTransfer\Exceptions\EpsException;
 use Knusperleicht\EpsBankTransfer\Requests\Parts\WebshopArticle;
 use Knusperleicht\EpsBankTransfer\Requests\TransferInitiatorDetails;
 use Knusperleicht\EpsBankTransfer\Requests\Parts\PaymentFlowUrls;
+use Monolog\Logger;
 use Nyholm\Psr7\Factory\Psr17Factory;
 use Symfony\Component\HttpClient\Psr18Client;
 
@@ -101,7 +102,7 @@ $soCommunicator = new SoCommunicator(
     $psr17Factory,
     $psr17Factory,
     SoCommunicator::TEST_MODE_URL, // Change to LIVE base URL for production
-    new Monolog\Logger('eps')
+    new Logger('eps')
 );
 
 // Optional: Display a bank selection to the user on your checkout page
@@ -110,21 +111,21 @@ try {
     $bankList = $soCommunicator->getBanks($config['interface_version'] ?? null);
     foreach ($bankList->getBanks() as $bank) {
         // You could render this as a dropdown in your checkout
-        echo "BIC: " . $bank->getBic() . "\n";
-        echo "Name: " . $bank->getName() . "\n";
-        echo "URL: " . $bank->getUrl() . "\n";
-        echo "Country: " . $bank->getCountryCode() . "\n";
-        echo "National Payment Types: " . implode(', ', $bank->getNationalPaymentTypes()) . "\n";
-        echo "International Payment Type: " . ($bank->getInternationalPaymentType() ?? 'N/A') . "\n";
-        echo "App2App: " . ($bank->isApp2app() ? 'Yes' : 'No') . "\n";
-        echo "-------------------\n";
+        echo 'BIC: ' . $bank->getBic() . PHP_EOL;
+        echo 'Name: ' . $bank->getName() . PHP_EOL;
+        echo 'URL: ' . $bank->getUrl() . PHP_EOL;
+        echo 'Country: ' . $bank->getCountryCode() . PHP_EOL;
+        echo 'National Payment Types: ' . implode(', ', $bank->getNationalPaymentTypes()) . PHP_EOL;
+        echo 'International Payment Type: ' . ($bank->getInternationalPaymentType() ?? 'N/A') . PHP_EOL;
+        echo 'App2App: ' . ($bank->isApp2app() ? 'Yes' : 'No') . PHP_EOL;
+        echo '-------------------' . PHP_EOL;
     }
 
     // Example: Preselect a bank using orderingCustomerOfiIdentifier (per EPS spec v2.6)
     // Rather than overriding the endpoint URL directly, we set the customer's bank selection via 
     // orderingCustomerOfiIdentifier to ensure proper routing to the bank.
     // In your UI, let the customer select their bank; here we just take the first as a demo:
-    $banks = $bankList->getBanks($config['interface_version'] ?? null);
+    $banks = $bankList->getBanks();
     if (!empty($banks)) {
         // orderingCustomerOfiIdentifier expects the bank identifier (typically BIC).
         // Please select a bank from the list above and call:
@@ -132,7 +133,7 @@ try {
     }
 } catch (\Throwable $e) {
     // If bank list is temporarily unavailable, continue without preselection
-    echo "Bank list: " . $e->getMessage() . "\n";
+    echo 'Bank list error: ' . $e->getMessage() . PHP_EOL;
 }
 
 // Optional: Override the default base URL (rarely needed)
@@ -152,29 +153,19 @@ try {
         $errorMessage = $protocolDetails->getErrorMessage();
         $transactionId = $protocolDetails->getTransactionId();
 
-        echo "Error occurred during EPS bank transfer initiation:\n";
-        echo "Error code: " . $errorCode . "\n";
-        echo "Error message: " . $errorMessage . "\n";
+        echo 'Error occurred during EPS bank transfer initiation:' . PHP_EOL;
+        echo 'Error code: ' . $errorCode . PHP_EOL;
+        echo 'Error message: ' . $errorMessage . PHP_EOL;
     } else {
         // Redirect the customer to their bank to complete authorization
-        echo "Redirecting to client URL: " . $protocolDetails->getClientRedirectUrl() . "\n";
-        echo "Transaction ID: " . $protocolDetails->getTransactionId() . "\n";
+        echo 'Redirecting to client URL: ' . $protocolDetails->getClientRedirectUrl() . PHP_EOL;
+        echo 'Transaction ID: ' . $protocolDetails->getTransactionId() . PHP_EOL;
 
         //usually you want to redirect the customer to the client URL
         //header('Location: ' . $protocolDetails->getClientRedirectUrl());
     }
 } catch (EpsException $e) {
-    // Handle PSA specific exceptions
-    $errorCode = 'EPS Exception';
-    $errorMessage = $e->getMessage();
-    echo "Error occurred during EPS bank transfer initiation:\n";
-    echo "Error code: " . $errorCode . "\n";
-    echo "Error message: " . $errorMessage . "\n";
+    echo 'EPS Exception: ' . $e->getMessage() . PHP_EOL;
 } catch (\Exception $e) {
-    // Handle other unexpected exceptions
-    $errorCode = 'Exception';
-    $errorMessage = $e->getMessage();
-    echo "Error occurred during EPS bank transfer initiation:\n";
-    echo "Error code: " . $errorCode . "\n";
-    echo "Error message: " . $errorMessage . "\n";
+    echo 'Exception: ' . $e->getMessage() . PHP_EOL;
 }

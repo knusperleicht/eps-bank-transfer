@@ -18,7 +18,7 @@ declare(strict_types=1);
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-require_once('../vendor/autoload.php');
+require_once __DIR__ . '/../vendor/autoload.php';
 
 // Optional: interface version can be set in samples/config.local.php (key: 'interface_version').
 // If not provided, the library default will be used (currently '2.6').
@@ -26,6 +26,7 @@ require_once('../vendor/autoload.php');
 use Knusperleicht\EpsBankTransfer\Api\SoCommunicator;
 use Knusperleicht\EpsBankTransfer\Exceptions\EpsException;
 use Knusperleicht\EpsBankTransfer\Requests\RefundRequest;
+use Monolog\Logger;
 use Nyholm\Psr7\Factory\Psr17Factory;
 use Symfony\Component\HttpClient\Psr18Client;
 
@@ -59,18 +60,18 @@ $soCommunicator = new SoCommunicator(
     $psr17Factory,
     $psr17Factory,
     SoCommunicator::TEST_MODE_URL,   // Use LIVE base URL in production
-    new Monolog\Logger('eps')
+    new Logger('eps')
 );
 
 try {
     // Optional version can be passed as the 2nd argument; default is '2.6'
     $refundResponse = $soCommunicator->sendRefundRequest($refundRequest, '2.6'); //only 2.7 is supported at this time
 
-    echo $refundResponse->getStatusCode() . ', ' . $refundResponse->getErrorMessage();
+    echo $refundResponse->getStatusCode() . ', ' . $refundResponse->getErrorMessage() . PHP_EOL;
     // Note: Status code '000' (No Errors) means the bank accepted the refund request.
     // Depending on the bank, manual approval might still be required.
 } catch (EpsException $e) {
-    echo 'EPS Exception: ' . $e->getMessage();
+    echo 'EPS Exception: ' . $e->getMessage() . PHP_EOL;
 } catch (\Exception $e) {
-    echo 'Exception: ' . $e->getMessage();
+    echo 'Exception: ' . $e->getMessage() . PHP_EOL;
 }
